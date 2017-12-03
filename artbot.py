@@ -11,30 +11,40 @@ from tweepy.streaming import StreamListener
 from credentials import *
 import random
 import utils
-
+import transform
+import tensorflow as tf
 
 from sys import stdout
 import numpy as np
-ckpoints=["checkpoint/pretrained-networks/dora-marr-network",
-       "checkpoint/pretrained-networks/rain-princess-network",
-       "checkpoint/pretrained-networks/starry-night-network"]
+import pyrebase
 
-def getstyled(data_in):
+config = {
+  "apiKey":"AIzaSyDQ52QqpRAHRJK5MiwrzPAybnp_J9Ehjpo",
+  "authDomain": "artgallery-e8143.firebaseapp.com",
+  "databaseURL": "https://artgallery-e8143.firebaseio.com",
+  "storageBucket": "artgallery-e8143.appspot.com"
+}
+
+firebase = pyrebase.initialize_app(config)
+cin=0;
+ckpoints=["/home/iamukasa/fast-style-transfer-1/checkpoint/pretrained-networks/dora-marr-network",
+       "/home/iamukasa/fast-style-transfer-1/checkpoint/pretrained-networks/rain-princess-network",
+       "/home/iamukasa/fast-style-transfer-1/checkpoint/pretrained-networks/starry-night-network"]
+checkpoint_dir=random.choice(ckpoints)
+
+
+def getstyled(data_in,cin):
  
-    paths_out="styled/test.jpg"
+    paths_out="styled/test"+str(cin)+".jpg"
     content_image = utils.load_image(data_in)
     reshaped_content_height = (content_image.shape[0] - content_image.shape[0] % 4)
     reshaped_content_width = (content_image.shape[1] - content_image.shape[1] % 4)
     reshaped_content_image = content_image[:reshaped_content_height, :reshaped_content_width, :]
     reshaped_content_image = np.ndarray.reshape(reshaped_content_image, (1,) + reshaped_content_image.shape)
-
-
-    checkpoint_dir=random.choice(ckpoints)
+   
     prediction = ffwd(reshaped_content_image,checkpoint_dir)
     utils.save_image(prediction,paths_out)
-    
-
-
+       
     return paths_out
 
 # Access and authorize our Twitter credentials from credentials.py
@@ -45,10 +55,23 @@ api = tweepy.API(auth)
 
 
 B="@shtaki_ke"
+new_tweets = api.user_timeline(screen_name =B,count=200)
 
-def tweet_image(url,sn,s):
+# list of specific strings we want to check for in Tweets
+
+
+
+#for s in new_tweets:
+#            print(s)
+#          sn = s.user.screen_name
+#       	    if 'media' in s.entities:
+#               for image in s.entities['media']:
+#                  x=image['media_url']
+#                   file=tweet_image(x,sn,s)
+
+def tweet_image(url,sn,s,cin):
     
-    filename = 'output/temp.jpg'
+    filename = 'output/temp'+str(cin)+'.jpg'
     # send a get request
     request = requests.get(url, stream=True)
     if request.status_code == 200:
@@ -56,9 +79,21 @@ def tweet_image(url,sn,s):
         i = Image.open(BytesIO(request.content))
         # Saves the image under the given filename
         i.save(filename)
-        output = getstyled(filename)
+        output = getstyled(filename,i)
         m ="@"+sn+" Here is your photo turned art"
         s = api.update_with_media(output,m, s.id)
+        cin=cin+1
+        storage = firebase.storage()
+        db = firebase.database() 
+        xgon=str(db.generate_key())+".jpeg"
+        storage.child("images/"+xgon).put(output)
+        url=storage.child("images"+str(output)).get_url(1)
+
+        tweetlink="https://twitter.com/"+str(sn)+"/status/"+str(s.id)
+              
+        data = {"url":url,
+                 "tweet":tweetlink}
+        db.child("photos").push(data)
 
 	
 
@@ -72,11 +107,17 @@ class MyStreamListener(StreamListener):
                 file=tweet_image(x,sn,s)
 
     def on_error(self, status_code):
-        if status_code == 420:
-            # returning False in on_data disconnects the stream
-       	    return  true
+        print(status_code)
 
 
-myStreamListener = MyStreamListener()
-myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
-myStream.filter(track=['@shtaki_ke'])
+#myStreamListener = MyStreamListener()
+#myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
+#myStream.filter(track=['@shtaki_ke'])
+for s in new_tweets:
+            print(s)
+            sn = s.user.screen_name
+            if 'media' in s.entities:
+                for image in s.entities['media']:
+                    x=image['media_url']
+                    file=tweet_image(x,sn,s,cin)
+
