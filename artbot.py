@@ -17,6 +17,7 @@ import tensorflow as tf
 from sys import stdout
 import numpy as np
 import pyrebase
+import random
 
 config = {
   "apiKey":"AIzaSyDQ52QqpRAHRJK5MiwrzPAybnp_J9Ehjpo",
@@ -27,10 +28,10 @@ config = {
 
 firebase = pyrebase.initialize_app(config)
 cin=0;
-ckpoints=["/home/iamukasa/fast-style-transfer-1/checkpoint/pretrained-networks/dora-marr-network",
-       "/home/iamukasa/fast-style-transfer-1/checkpoint/pretrained-networks/rain-princess-network",
-       "/home/iamukasa/fast-style-transfer-1/checkpoint/pretrained-networks/starry-night-network"]
-checkpoint_dir=random.choice(ckpoints)
+ckpoints=["checkpoint/pretrained-networks/dora-marr-network",
+       "checkpoint/pretrained-networks/rain-princess-network",
+       "checkpoint/pretrained-networks/starry-night-network"]
+
 
 
 def getstyled(data_in,cin):
@@ -42,7 +43,7 @@ def getstyled(data_in,cin):
     reshaped_content_image = content_image[:reshaped_content_height, :reshaped_content_width, :]
     reshaped_content_image = np.ndarray.reshape(reshaped_content_image, (1,) + reshaped_content_image.shape)
    
-    prediction = ffwd(reshaped_content_image,checkpoint_dir)
+    prediction = ffwd(reshaped_content_image,random.choice(ckpoints))
     utils.save_image(prediction,paths_out)
        
     return paths_out
@@ -54,8 +55,12 @@ api = tweepy.API(auth)
 
 
 
-B="@shtaki_ke"
-new_tweets = api.user_timeline(screen_name =B,count=200)
+#B="@shtaki_ke"
+#new_tweets = api.mentions_timeline(count=20)
+	
+
+
+
 
 # list of specific strings we want to check for in Tweets
 
@@ -80,7 +85,7 @@ def tweet_image(url,sn,s,cin):
         # Saves the image under the given filename
         i.save(filename)
         output = getstyled(filename,i)
-        m ="@"+sn+" Here is your photo turned art"
+        m ="@"+sn+" Here is your photo turned art "
         s = api.update_with_media(output,m, s.id)
         cin=cin+1
         storage = firebase.storage()
@@ -113,11 +118,20 @@ class MyStreamListener(StreamListener):
 #myStreamListener = MyStreamListener()
 #myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
 #myStream.filter(track=['@shtaki_ke'])
-for s in new_tweets:
-            print(s)
-            sn = s.user.screen_name
-            if 'media' in s.entities:
-                for image in s.entities['media']:
-                    x=image['media_url']
-                    file=tweet_image(x,sn,s,cin)
+#random.shuffle(new_tweets)
+#for s in new_tweets:
+            #print(s)
+            #sn = s.user.screen_name
+            #if 'media' in s.entities:
+                #for image in s.entities['media']:
+                    #x=image['media_url']
+                    #file=tweet_image(x,sn,s,cin)
+
+for s in tweepy.Cursor(api.search, q=('#NTW2018')).items(20):
+    print(s)
+    sn = s.user.screen_name
+    if 'media' in s.entities:
+        for image in s.entities['media']:
+            x=image['media_url']
+            file=tweet_image(x,sn,s,cin)
 
