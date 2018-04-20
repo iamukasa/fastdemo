@@ -1,10 +1,23 @@
-
 from io import BytesIO
 from PIL import Image
 from PIL import ImageFile
-import wget
-from stylize_image import ffwd
 
+from stylize_image import ffwd
+import tweepy
+import wget
+import requests
+import tweepy
+from tweepy.streaming import StreamListener
+from credentials import *
+import random
+import utils
+import transform
+import tensorflow as tf
+
+from sys import stdout
+import numpy as np
+import pyrebase
+import random
 
 cin=0;
 ckpoints=["checkpoint/pretrained-networks/dora-marr-network",
@@ -33,7 +46,7 @@ def getimage(url):
         i = Image.open(BytesIO(request.content))
         # Saves the image under the given filename
         i.save(filename)
-        output = getstyled(filename,i)
+        output = getstyled(filename)
     return  output
 
 def getimagelocal(url):

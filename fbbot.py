@@ -32,7 +32,7 @@ def receive_message():
                     send_message(recipient_id, response_sent_text)
                 #if user sends us a GIF, photo,video, or any other non-text item
                 if message['message'].get('attachments'):
-                    attachment_link = messaging_event["message"]["attachments"][0]["payload"]["url"]
+                    attachment_link = message["message"]["attachments"][0]["payload"]["url"]
                     urltosend= thebot.getimage(attachment_link)
                     send_message_photo(recipient_id,urltosend)
     return "Message Processed"
