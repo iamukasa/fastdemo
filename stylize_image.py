@@ -65,13 +65,13 @@ def ffwd(content, network_path):
 
         ckpt = tf.train.get_checkpoint_state(network_path)
 
-        if ckpt and ckpt.model_checkpoint_path:
-            saver.restore(sess, ckpt.model_checkpoint_path)
-        else:
-            raise Exception("No checkpoint found...")
+       #if ckpt and ckpt.model_checkpoint_path:
+        saver.restore(sess, ckpt.model_checkpoint_path)
+        #else:
+        #raise Exception("No checkpoint found...")
 
-        prediction = sess.run(network, feed_dict={img_placeholder:content})
+        prediction = sess.run(network,feed_dict={img_placeholder:content})
         return prediction[0]
-
+        sess.close()
 if __name__ == '__main__':
     main()

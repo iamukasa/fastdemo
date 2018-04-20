@@ -1,0 +1,40 @@
+from fbmq import Attachment, Template, QuickReply,Page
+from flask import Flask, request
+from messengerbot import getimage
+ 
+VERIFY_TOKEN = '2020'
+page = Page("EAAD06iqNXNABABEJy2nlEnl1rDh4cLMmCObZBLL45P3xHLyCajAcx2fPZCY0TpVPsZAbNudgxqC90ebtVeRnpw2r9Wp59RWcj9zygfxKxELiws7kWZAPSUPW0Sq4VLEnuG4yZAlOlmDEHGj30x24KPmvoT7apl9BwvmJUNzOgZDZD")
+
+app = Flask(__name__,static_url_path="/static")
+
+@app.route('/webhook', methods=['GET'])
+def validate():
+    if request.args.get('hub.mode', '') == 'subscribe' and request.args.get('hub.verify_token', '') == VERIFY_TOKEN:
+        print("Validating webhook")
+
+        return request.args.get('hub.challenge', '')
+    else:
+        return 'Failed validation. Make sure the validation tokens match.'
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+  page.handle_webhook(request.get_data(as_text=True))
+  return "ok"
+
+@page.handle_message
+def message_handler(event):
+  """:type event: fbmq.Event"""
+  sender_id = event.sender_id
+  original =event.message.get('attachments')
+  image_url=getimage(original)
+  
+  page.send(recipient_id, Attachment.Image(image_url))
+
+@page.after_send
+def after_send(payload, response):
+  """:type payload: fbmq.Payload"""
+  print("complete")
+
+if __name__ == '__main__':
+    app.run(port=3000, debug=True)
+

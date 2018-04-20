@@ -58,7 +58,14 @@ Each network was trained with 80,000 training images taken from the [Microsoft C
 ## Acknowledgements
 
 This code was inspired by an existing TensorFlow [implementation by Logan Engstrom](https://github.com/lengstrom/fast-style-transfer), and I have re-used most of his transform network code here.
+
 The VGG network code is based on an existing [implementation by Anish Anish Athalye](https://github.com/anishathalye/neural-style)
+
+##Deployments 
+twitter - artbot.py
+facebook messenger  -fbbot.py
+Flask app     -serve.py
+
 
 ## License
 

@@ -1,0 +1,5 @@
+consumer_key = 'wDMDPYhbiNqcPUcdonNg1By77'
+consumer_secret ='Gh7JitKC8PEERQRjoED8KBdTSjyDyn19NUGIY9JOftq8lfuqbk'
+access_token = '3538319836-Xu1fah5z6f2kZKa2z3uUPGmBQ9u4PLjGCYnFL7e'
+access_token_secret = 'KjPxGFyzrrkf1N1Mz3MVK46eVsYkIc9aKwCnjz54fF1dJ'
+

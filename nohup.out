@@ -1,0 +1,34 @@
+Traceback (most recent call last):
+  File "fbbot.py", line 3, in <module>
+    from messengerbot import getimage
+  File "/root/fast-style-transfer-1/messengerbot.py", line 6, in <module>
+    from stylize_image import ffwd
+  File "/root/fast-style-transfer-1/stylize_image.py", line 11, in <module>
+    import tensorflow as tf
+  File "/root/styletransfer/local/lib/python2.7/site-packages/tensorflow/__init__.py", line 24, in <module>
+    from tensorflow.python import *
+  File "/root/styletransfer/local/lib/python2.7/site-packages/tensorflow/python/__init__.py", line 77, in <module>
+    from tensorflow.python.estimator import estimator_lib as estimator
+  File "/root/styletransfer/local/lib/python2.7/site-packages/tensorflow/python/estimator/estimator_lib.py", line 22, in <module>
+    from tensorflow.python.estimator.estimator import Estimator
+  File "/root/styletransfer/local/lib/python2.7/site-packages/tensorflow/python/estimator/estimator.py", line 39, in <module>
+    from tensorflow.python.ops import metrics as metrics_lib
+  File "/root/styletransfer/local/lib/python2.7/site-packages/tensorflow/python/ops/metrics.py", line 51, in <module>
+    from tensorflow.python.ops.metrics_impl import *
+  File "/root/styletransfer/local/lib/python2.7/site-packages/tensorflow/python/ops/metrics_impl.py", line 29, in <module>
+    from tensorflow.python.ops import nn
+  File "/root/styletransfer/local/lib/python2.7/site-packages/tensorflow/python/ops/nn.py", line 108, in <module>
+    from tensorflow.python.ops import ctc_ops as _ctc_ops
+  File "/root/styletransfer/local/lib/python2.7/site-packages/tensorflow/python/ops/ctc_ops.py", line 27, in <module>
+    from tensorflow.python.ops.nn_grad import _BroadcastMul
+  File "/root/styletransfer/local/lib/python2.7/site-packages/tensorflow/python/ops/nn_grad.py", line 617, in <module>
+    @ops.RegisterGradient("BatchNormWithGlobalNormalization")
+  File "/root/styletransfer/local/lib/python2.7/site-packages/tensorflow/python/framework/ops.py", line 1750, in __call__
+    _gradient_registry.register(f, self._op_type)
+  File "/root/styletransfer/local/lib/python2.7/site-packages/tensorflow/python/framework/registry.py", line 67, in register
+    stack = traceback.extract_stack()
+  File "/usr/lib/python2.7/traceback.py", line 305, in extract_stack
+    linecache.checkcache(filename)
+  File "/root/styletransfer/lib/python2.7/linecache.py", line 60, in checkcache
+    stat = os.stat(fullname)
+KeyboardInterrupt
