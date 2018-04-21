@@ -4,10 +4,17 @@ import messengerbot as thebot
 from flask import Flask, request
 from pymessenger.bot import Bot
 import os 
+from fbmq import Page, Attachment, Template, QuickReply 
+
 app = Flask(__name__)
 ACCESS_TOKEN = 'EAAD06iqNXNABAEEDvVhZAKuTDIksTdC8Pn98HIFIUPdN56pH7ovWt20YcdNVgn5hYLemYVF5v32wz0EQaZCrARC8NfgTMWTZCOi2BvdBy18GBWcirZCUfE4tIfWvpUp3G8MTDjvV1ELeiAfzQ9mVdvBYKatxm59isJAkgwPsyQZDZD'   #ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 VERIFY_TOKEN = '420'   #VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
+
 bot = Bot (ACCESS_TOKEN)
+
+
+
+#page=Page(ACCESS_TOKEN)
 
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
@@ -60,7 +67,10 @@ def send_message(recipient_id, response):
     return "success"
 def send_message_photo(recipient_id,url):
     bot.send_text_message(recipient_id,"Here is your photo made into art")
-    bot.send_attachment(recipient_id,"image",url)
+    print(url)   
+    bot.send_image_url(recipient_id,url)
+    #page.send(recipient_id, Attachment.File(url))
+    return "sucess"
  
 
 if __name__ == "__main__":

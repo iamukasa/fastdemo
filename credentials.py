@@ -1,5 +1,5 @@
-consumer_key = 'wDMDPYhbiNqcPUcdonNg1By77'
-consumer_secret ='Gh7JitKC8PEERQRjoED8KBdTSjyDyn19NUGIY9JOftq8lfuqbk'
-access_token = '3538319836-Xu1fah5z6f2kZKa2z3uUPGmBQ9u4PLjGCYnFL7e'
-access_token_secret = 'KjPxGFyzrrkf1N1Mz3MVK46eVsYkIc9aKwCnjz54fF1dJ'
+consumer_key = '5tB0Q13alXNROOmidb4g3mOoJ'
+consumer_secret ='wgXWVhUfMD4FJW7gzcSiTfkkZHOx0PcD3Z2TJGnM8Eq2j68ecl'
+access_token = '3538319836-OvdzMaAwCjY9FQFUDcRaHjNHIEPX5S0xvokkXb9'
+access_token_secret = '7L0LmoUYKnhYgxrBRiJHTurOQqMIrughZ01mLRukQsO9H'
 

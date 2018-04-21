@@ -19,6 +19,15 @@ import numpy as np
 import pyrebase
 import random
 
+
+config = {
+  "apiKey":"AIzaSyDQ52QqpRAHRJK5MiwrzPAybnp_J9Ehjpo",
+  "authDomain": "artgallery-e8143.firebaseapp.com",
+  "databaseURL": "https://artgallery-e8143.firebaseio.com",
+  "storageBucket": "artgallery-e8143.appspot.com"
+}
+
+firebase = pyrebase.initialize_app(config)
 cin=0;
 ckpoints=["checkpoint/pretrained-networks/dora-marr-network",
        "checkpoint/pretrained-networks/rain-princess-network",
@@ -47,7 +56,12 @@ def getimage(url):
         # Saves the image under the given filename
         i.save(filename)
         output = getstyled(filename)
-    return  output
+        storage = firebase.storage()
+        db = firebase.database()
+        xgon=str(db.generate_key())+".jpeg"
+        storage.child("messengerbot/"+xgon).put(output)
+        url=storage.child("messengerbot/"+xgon).get_url(1)
+    return  url
 
 def getimagelocal(url):
 
