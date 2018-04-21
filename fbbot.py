@@ -12,7 +12,11 @@ VERIFY_TOKEN = '420'   #VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
 
 bot = Bot (ACCESS_TOKEN)
 
-
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
 
 #page=Page(ACCESS_TOKEN)
 
@@ -40,7 +44,11 @@ def receive_message():
                 #if user sends us a GIF, photo,video, or any other non-text item
                 if message['message'].get('attachments'):
                     attachment_link = message["message"]["attachments"][0]["payload"]["url"]
-                    urltosend= thebot.getimage(attachment_link)
+                    try:
+                        urltosend= thebot.getimage(attachment_link        
+                    except Exception:
+                           shutdown_server()
+                
                     send_message_photo(recipient_id,urltosend)
     return "Message Processed"
 
@@ -73,5 +81,12 @@ def send_message_photo(recipient_id,url):
     return "sucess"
  
 
+
 if __name__ == "__main__":
-    app.run(port=3000)
+    try: 
+        app.run(port=3000)
+    except Exception:
+        func = request.environ.get('werkzeug.server.shutdown')
+        if func is None:
+            raise RuntimeError('Not running with the Werkzeug Server')
+        func()
