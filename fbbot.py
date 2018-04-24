@@ -46,8 +46,10 @@ def receive_message():
                     attachment_link = message["message"]["attachments"][0]["payload"]["url"]
                     urltosend= thebot.getimage(attachment_link)
                     send_message_photo(recipient_id,urltosend)
-                    shutdown_server()
-    return "Message Processed"
+    try:                
+        return "Message Processed"
+    finally:
+        shutdown_server()
 
 
 
