@@ -127,7 +127,7 @@ class MyStreamListener(StreamListener):
                     #x=image['media_url']
                     #file=tweet_image(x,sn,s,cin)
 
-for s in tweepy.Cursor(api.search, q=('#NTW2018')).items(20):
+for s in tweepy.Cursor(api.search, q=('This is like a painting from the Renaissance')).items(20):
     print(s)
     sn = s.user.screen_name
     if 'media' in s.entities:
