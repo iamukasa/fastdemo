@@ -9,3 +9,4 @@ outputs*
 *.ckpt
 .DS_Store
 COCO_images*
+credentials.py
